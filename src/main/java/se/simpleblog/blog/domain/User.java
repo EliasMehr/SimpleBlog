@@ -49,4 +49,7 @@ public class User {
 
     @OneToMany(fetch = EAGER, mappedBy = "owner", cascade = ALL)
     private Set<Blog> blogs = new HashSet<>();
+
+    @OneToMany(mappedBy = "commentByUser", fetch = EAGER, cascade = ALL)
+    private Set<Comment> comments = new HashSet<>();
 }

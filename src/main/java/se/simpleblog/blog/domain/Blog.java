@@ -35,4 +35,5 @@ public class Blog {
 
     @OneToMany(fetch = EAGER, mappedBy = "commentBy", cascade = ALL)
     private Set<Comment> comments = new HashSet<>();
+
 }
