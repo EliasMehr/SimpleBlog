@@ -20,14 +20,11 @@ public class Comment {
     @GeneratedValue
     private UUID id;
 
-    @CreatedDate
     private Date published;
 
     private String comment;
 
     @ManyToOne
-    private User commentBy;
+    private Blog commentBy;
 
-    @ManyToOne
-    private Blog blog;
 }

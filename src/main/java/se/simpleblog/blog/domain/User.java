@@ -10,7 +10,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Entity
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.*;
+
+@Entity(name = "Users")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -20,9 +23,9 @@ public class User {
     @GeneratedValue
     private UUID id;
 
-    @Lob
-    @Column(columnDefinition = "BLOB")
-    private byte[] profileImage;
+//    @Lob
+//    @Column(columnDefinition = "BLOB")
+//    private byte[] profileImage;
 
     @NotBlank
     @Size(min = 2, max = 20, message = "first-name must contain min 2 characters and max 20 characters")
@@ -41,28 +44,9 @@ public class User {
     private String email;
 
     @NotBlank
-    @Size(min = 1,max = 100)
+    @Size(min = 1, max = 100)
     private String password;
 
-    @OneToMany(mappedBy = "owner")
-    Set<Blog> blogs = new HashSet<>();
-
-    @OneToMany(mappedBy = "commentBy")
-    Set<Comment> comments = new HashSet<>();
-
-    public void addBlog(Blog blog) {
-        blogs.add(blog);
-        blog.setOwner(this);
-    }
-
-    public void deleteBlog(Blog blog) {
-        blogs.remove(blog);
-        blog.setOwner(null);
-    }
-
-    public void addComment(Comment comment) {
-        comments.add(comment);
-        comment.setCommentBy(this);
-        // TODO fix so that comments match for the current blog-post
-    }
+    @OneToMany(fetch = EAGER, mappedBy = "owner", cascade = ALL)
+    private Set<Blog> blogs = new HashSet<>();
 }

@@ -30,9 +30,9 @@ public class Blog {
 
     private int dislikeCount;
 
-    @OneToMany(mappedBy = "blog")
-    Set<Comment> comments = new HashSet<>();
-
-    @ManyToOne(cascade = ALL, fetch = LAZY)
+    @ManyToOne(fetch = EAGER, cascade = ALL)
     private User owner;
+
+    @OneToMany(fetch = EAGER, mappedBy = "commentBy", cascade = ALL)
+    private Set<Comment> comments = new HashSet<>();
 }
