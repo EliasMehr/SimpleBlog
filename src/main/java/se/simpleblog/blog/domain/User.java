@@ -1,5 +1,6 @@
 package se.simpleblog.blog.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -50,6 +51,12 @@ public class User {
     @OneToMany(fetch = EAGER, mappedBy = "owner", cascade = ALL)
     private Set<Blog> blogs = new HashSet<>();
 
+    @JsonIgnoreProperties({"blog"})
     @OneToMany(mappedBy = "commentByUser", fetch = EAGER, cascade = ALL)
     private Set<Comment> comments = new HashSet<>();
+
+    public void addBlog(Blog blog) {
+        blogs.add(blog);
+        blog.setOwner(this);
+    }
 }

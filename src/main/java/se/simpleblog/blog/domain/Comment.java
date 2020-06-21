@@ -1,13 +1,16 @@
 package se.simpleblog.blog.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static javax.persistence.CascadeType.ALL;
@@ -22,13 +25,16 @@ public class Comment {
     @GeneratedValue
     private UUID id;
 
-    private Date published;
+    @CreationTimestamp
+    private LocalDateTime published;
 
     private String comment;
 
-    @ManyToOne
-    private Blog commentBy;
+    @JsonBackReference
+    @ManyToOne(fetch = EAGER, cascade = ALL)
+    private Blog blog;
 
+    @JsonIgnoreProperties({"comments", "age", "email", "password", "blogs"})
     @ManyToOne(fetch = EAGER, cascade = ALL)
     private User commentByUser;
 
