@@ -41,4 +41,10 @@ public class BlogController {
         blogService.addComment(blogID, comment, userID);
         return ResponseEntity.ok("Successfully added a comment");
     }
+
+    @DeleteMapping("/{blogID}/{commentID}")
+    public ResponseEntity<String> deleteComment(@PathVariable UUID blogID, @PathVariable UUID commentID) {
+        blogService.deleteComment(blogID, commentID);
+        return ResponseEntity.ok("Deleted comment successfully");
+    }
 }

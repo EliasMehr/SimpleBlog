@@ -8,6 +8,7 @@ import se.simpleblog.blog.domain.Comment;
 import se.simpleblog.blog.domain.User;
 import se.simpleblog.blog.exception.APIRequestException;
 import se.simpleblog.blog.repository.BlogRepository;
+import se.simpleblog.blog.repository.CommentRepository;
 import se.simpleblog.blog.repository.UserRepository;
 
 import java.util.Comparator;
@@ -21,11 +22,13 @@ public class BlogService {
 
     private final BlogRepository repository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     @Autowired
-    public BlogService(BlogRepository repository, UserRepository userRepository) {
+    public BlogService(BlogRepository repository, UserRepository userRepository, CommentRepository commentRepository) {
         this.repository = repository;
         this.userRepository = userRepository;
+        this.commentRepository = commentRepository;
     }
 
     public List<Blog> findAllBlogs(UUID userID) {
@@ -42,13 +45,14 @@ public class BlogService {
         }, () -> { throw new APIRequestException("Could not save blog to user"); });
     }
 
+    // TODO ADD to BlogController
     @Transactional
     public void update(UUID blogID, Blog blog) {
         repository.findById(blogID).ifPresentOrElse(blogItem -> {
                     blog.setId(blogItem.getId());
                     repository.save(blog); }, () -> { throw new APIRequestException("Cannot find requested blog item by this ID"); });
     }
-
+    // TODO ADD to BlogController
     @Transactional
     public void delete(UUID blogID) {
         repository.findById(blogID).ifPresentOrElse(repository::delete,
@@ -61,6 +65,14 @@ public class BlogService {
             Optional<User> userByID = userRepository.findById(userID);
             blog.addComment(comment, userByID.get());
         }, () -> { throw new APIRequestException("Could not add comment"); });
+    }
+
+    @Transactional
+    public void deleteComment(UUID blogID, UUID commentID) {
+        repository.findById(blogID).ifPresentOrElse(blog -> {
+            Optional<Comment> comment = commentRepository.findById(commentID);
+            blog.deleteComment(comment.get());
+        }, () -> { throw new APIRequestException("Could not delete comment"); });
     }
 
 

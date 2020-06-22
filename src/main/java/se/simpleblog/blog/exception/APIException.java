@@ -1,13 +1,12 @@
 package se.simpleblog.blog.exception;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-@Getter
-@Setter
+
+@AllArgsConstructor
 public class APIException {
 
-    private String message;
-    private HttpStatus status;
+    private final String message;
+    private final HttpStatus status;
 }

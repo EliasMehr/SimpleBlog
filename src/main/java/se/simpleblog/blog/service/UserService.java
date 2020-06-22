@@ -9,7 +9,6 @@ import se.simpleblog.blog.repository.UserRepository;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -23,12 +22,14 @@ public class UserService {
         this.repository = repository;
     }
 
+    // Register a new user
     @Transactional
     public void register(User user) {
         isEmailTaken(repository.existsByEmail(user.getEmail()), "Email is already taken!");
         repository.save(user);
     }
 
+    // Fetching all users from database
     public List<User> findAll() {
         return repository.findAll()
                 .stream()
@@ -36,6 +37,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    // Update an existing users credentials
     @Transactional
     public void update(UUID userID, User user) {
         repository.findById(userID).ifPresentOrElse(userObject -> {
@@ -44,11 +46,14 @@ public class UserService {
         }, () -> { throw new APIRequestException("Cannot find user"); });
     }
 
+    // Delete an existing user
     @Transactional
     public void delete(UUID userID) {
-        repository.findById(userID).ifPresentOrElse(repository::delete, () -> { throw new APIRequestException("Cannot delete user by ID: " + userID); });
+        repository.findById(userID).ifPresentOrElse(repository::delete,
+        () -> { throw new APIRequestException("Cannot delete user by ID: " + userID); });
     }
 
+    // Method to check if an email is already to not allow duplicate emails to register
     public void isEmailTaken(boolean isPresent, String message) {
         if (isPresent) {
             throw new APIRequestException(message);

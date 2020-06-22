@@ -41,8 +41,7 @@ public class Blog {
     @ManyToOne(fetch = EAGER, cascade = ALL)
     private User owner;
 
-    //@JsonIgnoreProperties({"blog", "commentByUser", "owner"})
-    @OneToMany(fetch = EAGER, mappedBy = "blog", cascade = ALL)
+    @OneToMany(fetch = EAGER, mappedBy = "blog", cascade = ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
 
     public void addComment(Comment comment, User user) {

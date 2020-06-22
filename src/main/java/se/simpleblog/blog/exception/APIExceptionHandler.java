@@ -8,6 +8,7 @@ public class APIExceptionHandler {
 
     @ExceptionHandler(APIRequestException.class)
     public ResponseEntity<?> exception(APIRequestException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        APIException apiException = new APIException(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
     }
 }
