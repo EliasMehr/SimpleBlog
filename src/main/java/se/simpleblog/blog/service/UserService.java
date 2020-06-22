@@ -46,9 +46,7 @@ public class UserService {
 
     @Transactional
     public void delete(UUID userID) {
-        Optional<User> userByID = repository.findById(userID);
-        userByID.ifPresentOrElse(repository::delete,
-        () -> { throw new APIRequestException("Cannot delete user by ID: " + userID); });
+        repository.findById(userID).ifPresentOrElse(repository::delete, () -> { throw new APIRequestException("Cannot delete user by ID: " + userID); });
     }
 
     public void isEmailTaken(boolean isPresent, String message) {
