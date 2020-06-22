@@ -13,7 +13,6 @@ import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
 
 @Entity
@@ -31,11 +30,11 @@ public class Comment {
     private String comment;
 
     @JsonBackReference
-    @ManyToOne(fetch = EAGER, cascade = ALL)
+    @ManyToOne(fetch = EAGER)
     private Blog blog;
 
     @JsonIgnoreProperties({"comments", "age", "email", "password", "blogs"})
-    @ManyToOne(fetch = EAGER, cascade = ALL)
+    @ManyToOne(fetch = EAGER)
     private User commentByUser;
 
 }

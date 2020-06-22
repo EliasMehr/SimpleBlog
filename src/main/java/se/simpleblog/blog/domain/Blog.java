@@ -30,7 +30,6 @@ public class Blog {
 
     private String context;
 
-    private int likeCount;
 
     private int dislikeCount;
 
@@ -38,10 +37,14 @@ public class Blog {
     private LocalDateTime published;
 
     @JsonBackReference
-    @ManyToOne(fetch = EAGER, cascade = ALL)
+    @ManyToOne(fetch = EAGER)
     private User owner;
 
-    @OneToMany(fetch = EAGER, mappedBy = "blog", cascade = ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({"age", "email", "password", "blogs", "comments"})
+    @OneToMany(fetch = EAGER, mappedBy = "likedByUser", cascade = ALL)
+    private Set<User> likes = new HashSet<>();
+
+    @OneToMany(fetch = EAGER, mappedBy = "blog", cascade = ALL)
     private Set<Comment> comments = new HashSet<>();
 
     public void addComment(Comment comment, User user) {
@@ -54,6 +57,16 @@ public class Blog {
         comments.remove(comment);
         comment.setBlog(null);
         comment.setCommentByUser(null);
+    }
+
+    public void addLike(User user) {
+        likes.add(user);
+        user.setLikedByUser(this);
+    }
+
+    public void deleteLike(User user) {
+        likes.remove(user);
+        user.setLikedByUser(null);
     }
 
 

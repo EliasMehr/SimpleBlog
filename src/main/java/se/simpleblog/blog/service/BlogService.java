@@ -52,11 +52,13 @@ public class BlogService {
                     blog.setId(blogItem.getId());
                     repository.save(blog); }, () -> { throw new APIRequestException("Cannot find requested blog item by this ID"); });
     }
-    // TODO ADD to BlogController
+
     @Transactional
-    public void delete(UUID blogID) {
-        repository.findById(blogID).ifPresentOrElse(repository::delete,
-                () -> { throw new APIRequestException("Cannot delete requested blog item"); });
+    public void delete(UUID userID ,UUID blogID) {
+       userRepository.findById(userID).ifPresentOrElse(user -> {
+           Optional<Blog> blogByID = repository.findById(blogID);
+           user.deleteBlog(blogByID.get());
+       }, () -> { throw new APIRequestException("Cannot find blog by id"); });
     }
 
     @Transactional
@@ -76,4 +78,41 @@ public class BlogService {
     }
 
 
+    private void addLike(UUID blogID, UUID userID) {
+        repository.findById(blogID).ifPresentOrElse(blog -> {
+            Optional<User> userExists = blog.getLikes().stream()
+                    .filter(user -> userID.equals(user.getId()))
+                    .findAny();
+
+            if (userExists.isPresent()) {
+                throw new APIRequestException("You cannot like more than once");
+            } else {
+                User user = userRepository.findById(userID).get();
+                blog.addLike(user);
+            }
+        }, () -> { throw new APIRequestException("Cannot find blog by id"); });
+    }
+
+    private void deleteLike(UUID blogID, UUID userID) {
+        repository.findById(blogID).ifPresentOrElse(blog -> {
+            blog.getLikes().stream()
+                    .filter(user -> userID.equals(user.getId()))
+                    .findAny()
+                    .ifPresent(blog::deleteLike);
+
+        }, () -> { throw new APIRequestException("No user found in likes by id"); });
+    }
+    @Transactional
+    public void handleLikes(UUID blogID, UUID userID, Type status) {
+        switch (status) {
+            case LIKE -> addLike(blogID, userID);
+            case DISLIKE -> deleteLike(blogID, userID);
+        }
+    }
+
+
+
+    public enum Type {
+        DISLIKE, LIKE
+        }
 }

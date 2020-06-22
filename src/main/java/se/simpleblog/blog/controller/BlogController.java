@@ -11,6 +11,8 @@ import se.simpleblog.blog.service.BlogService;
 import java.util.List;
 import java.util.UUID;
 
+import static se.simpleblog.blog.service.BlogService.*;
+
 @RestController
 @RequestMapping("/blog")
 public class BlogController {
@@ -42,7 +44,23 @@ public class BlogController {
         return ResponseEntity.ok("Successfully added a comment");
     }
 
-    @DeleteMapping("/{blogID}/{commentID}")
+    @PatchMapping("manage-blog/{blogID}/{userID}")
+    public ResponseEntity<String> addLike(@PathVariable UUID blogID, @PathVariable UUID userID, @RequestParam Type type){
+        try {
+            blogService.handleLikes(blogID, userID, type);
+            return ResponseEntity.ok("Status: " + type);
+        } catch (APIRequestException exception) {
+            throw new APIRequestException(exception.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{userID}/{blogID}")
+    public ResponseEntity<String> delete(@PathVariable UUID userID, @PathVariable UUID blogID) {
+        blogService.delete(userID,blogID);
+        return ResponseEntity.ok("Deleted");
+    }
+
+    @DeleteMapping("comment/{blogID}/{commentID}")
     public ResponseEntity<String> deleteComment(@PathVariable UUID blogID, @PathVariable UUID commentID) {
         blogService.deleteComment(blogID, commentID);
         return ResponseEntity.ok("Deleted comment successfully");
