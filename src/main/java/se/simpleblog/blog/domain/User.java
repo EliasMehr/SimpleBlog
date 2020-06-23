@@ -57,8 +57,12 @@ public class User {
     private Set<Comment> comments = new HashSet<>();
 
     @JsonIgnore
-    @ManyToOne(fetch = EAGER)
-    private Blog likedByUser;
+    @ManyToMany(fetch = EAGER, mappedBy = "likes")
+    private Set<Blog> blogLikes = new HashSet<>();
+
+    @JsonIgnore
+    @ManyToMany(fetch = EAGER, mappedBy = "disLikes")
+    private Set<Blog> blogDisLikes = new HashSet<>();
 
     public void addBlog(Blog blog) {
         blogs.add(blog);

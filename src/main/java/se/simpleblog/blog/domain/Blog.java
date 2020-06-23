@@ -30,9 +30,6 @@ public class Blog {
 
     private String context;
 
-
-    private int dislikeCount;
-
     @CreationTimestamp
     private LocalDateTime published;
 
@@ -41,8 +38,18 @@ public class Blog {
     private User owner;
 
     @JsonIgnoreProperties({"age", "email", "password", "blogs", "comments"})
-    @OneToMany(fetch = EAGER, mappedBy = "likedByUser", cascade = ALL)
+    @ManyToMany(fetch = EAGER, cascade = ALL)
+    @JoinTable(name = "blog_likes",
+            joinColumns = @JoinColumn(name = "blog_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id") )
     private Set<User> likes = new HashSet<>();
+
+    @JsonIgnoreProperties({"age", "email", "password", "blogs", "comments"})
+    @ManyToMany(fetch = EAGER, cascade = ALL)
+    @JoinTable(name = "blog_dislikes",
+            joinColumns = @JoinColumn(name = "blog_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id") )
+    private Set<User> disLikes = new HashSet<>();
 
     @OneToMany(fetch = EAGER, mappedBy = "blog", cascade = ALL)
     private Set<Comment> comments = new HashSet<>();
@@ -61,12 +68,22 @@ public class Blog {
 
     public void addLike(User user) {
         likes.add(user);
-        user.setLikedByUser(this);
+        user.getBlogLikes().add(this);
     }
 
     public void deleteLike(User user) {
         likes.remove(user);
-        user.setLikedByUser(null);
+        user.getBlogLikes().remove(this);
+    }
+
+    public void addDislike(User user) {
+        disLikes.add(user);
+        user.getBlogDisLikes().add(this);
+    }
+
+    public void deleteDislike(User user) {
+        disLikes.remove(user);
+        user.getBlogDisLikes().remove(this);
     }
 
 
