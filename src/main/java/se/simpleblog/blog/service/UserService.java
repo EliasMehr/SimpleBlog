@@ -7,6 +7,7 @@ import se.simpleblog.blog.domain.User;
 import se.simpleblog.blog.exception.APIRequestException;
 import se.simpleblog.blog.repository.UserRepository;
 
+import java.io.FileInputStream;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;

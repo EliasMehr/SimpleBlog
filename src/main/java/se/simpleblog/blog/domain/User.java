@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.imageio.stream.ImageInputStream;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.sql.Blob;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -24,10 +26,6 @@ public class User {
     @Id
     @GeneratedValue
     private UUID id;
-
-//    @Lob
-//    @Column(columnDefinition = "BLOB")
-//    private byte[] profileImage;
 
     @NotBlank
     @Size(min = 2, max = 20, message = "first-name must contain min 2 characters and max 20 characters")
