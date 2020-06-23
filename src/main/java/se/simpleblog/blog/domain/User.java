@@ -6,16 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.imageio.stream.ImageInputStream;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.sql.Blob;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import static javax.persistence.CascadeType.*;
-import static javax.persistence.FetchType.*;
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity(name = "Users")
 @NoArgsConstructor
@@ -26,6 +24,8 @@ public class User {
     @Id
     @GeneratedValue
     private UUID id;
+
+    private String profileImageLink;
 
     @NotBlank
     @Size(min = 2, max = 20, message = "first-name must contain min 2 characters and max 20 characters")

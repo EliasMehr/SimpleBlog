@@ -7,7 +7,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import se.simpleblog.blog.domain.User;
-import se.simpleblog.blog.exception.APIException;
 import se.simpleblog.blog.exception.APIRequestException;
 import se.simpleblog.blog.service.UserService;
 
@@ -35,7 +34,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> register(@Valid @RequestBody User user) {
+    public ResponseEntity<User> register(@Valid
+                                         @RequestBody User user) {
         try {
             userService.register(user);
             return ResponseEntity.ok(user);
@@ -57,6 +57,7 @@ public class UserController {
     @PutMapping("{userID}")
     public ResponseEntity<User> update(@PathVariable UUID userID,
                                        @Valid @RequestBody User user) {
+
         userService.update(userID, user);
         return ResponseEntity.ok(user);
     }

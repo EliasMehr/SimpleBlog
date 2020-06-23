@@ -7,7 +7,6 @@ import se.simpleblog.blog.domain.User;
 import se.simpleblog.blog.exception.APIRequestException;
 import se.simpleblog.blog.repository.UserRepository;
 
-import java.io.FileInputStream;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -40,7 +39,9 @@ public class UserService {
 
     // Update an existing users credentials
     @Transactional
-    public void update(UUID userID, User user) {
+    public void update(UUID userID,
+                       User user) {
+
         repository.findById(userID).ifPresentOrElse(userObject -> {
             user.setId(userObject.getId());
             repository.save(user);
@@ -55,7 +56,9 @@ public class UserService {
     }
 
     // Method to check if an email is already to not allow duplicate emails to register
-    public void isEmailTaken(boolean isPresent, String message) {
+    public void isEmailTaken(boolean isPresent,
+                             String message) {
+
         if (isPresent) {
             throw new APIRequestException(message);
         }
