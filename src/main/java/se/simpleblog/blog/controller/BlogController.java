@@ -47,7 +47,7 @@ public class BlogController {
     @PatchMapping("manage-blog/{blogID}/{userID}")
     public ResponseEntity<String> addLike(@PathVariable UUID blogID, @PathVariable UUID userID, @RequestParam Type type){
             blogService.handleLikes(blogID, userID, type);
-            return ResponseEntity.ok("Status: " + type);
+            return ResponseEntity.ok("You've " + type + "D the following blog");
     }
 
     @DeleteMapping("/{userID}/{blogID}")

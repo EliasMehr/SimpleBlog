@@ -95,7 +95,8 @@ public class BlogService {
                             blog.getLikes().add(user);
                             blog.getDisLikes().remove(user);
                         });
-                    } }, () -> { throw new APIRequestException("Cannot find blog by id"); });
+                    } else userRepository.findById(userID).ifPresent(blog::addLike);
+                    }, () -> { throw new APIRequestException("Cannot find blog by id"); });
     }
 
 
@@ -127,7 +128,7 @@ public class BlogService {
                     blog.getLikes().remove(user);
                     blog.getDisLikes().add(user);
                 });
-            }
+            } else userRepository.findById(userID).ifPresent(blog::addDislike);
         });
     }
 
