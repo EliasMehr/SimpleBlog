@@ -23,7 +23,7 @@ public class ProfileImageController {
     }
 
     @PostMapping
-    public ResponseEntity<String> upload(@RequestBody MultipartFile file) {
+    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) {
         ProfileImage profileImage = profileImageService.save(file);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()

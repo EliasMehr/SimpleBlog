@@ -34,30 +34,42 @@ public class BlogController {
     }
 
     @PostMapping("/{user}")
-    public void create(@PathVariable UUID user, @RequestBody Blog blog) {
+    public void create(@PathVariable UUID user,
+                       @RequestBody Blog blog) {
+
         blogService.create(user, blog);
     }
 
     @PatchMapping("/{blogID}/{userID}")
-    public ResponseEntity<String> addComment(@PathVariable UUID blogID, @PathVariable UUID userID, @RequestBody Comment comment) {
+    public ResponseEntity<String> addComment(@PathVariable UUID blogID,
+                                             @PathVariable UUID userID,
+                                             @RequestBody Comment comment) {
+
         blogService.addComment(blogID, comment, userID);
         return ResponseEntity.ok("Successfully added a comment");
     }
 
     @PatchMapping("manage-blog/{blogID}/{userID}")
-    public ResponseEntity<String> addLike(@PathVariable UUID blogID, @PathVariable UUID userID, @RequestParam Type type){
-            blogService.handleLikes(blogID, userID, type);
-            return ResponseEntity.ok("You've " + type + "D the following blog");
+    public ResponseEntity<String> addLike(@PathVariable UUID blogID,
+                                          @PathVariable UUID userID,
+                                          @RequestParam Type type) {
+
+        blogService.handleLikes(blogID, userID, type);
+        return ResponseEntity.ok("You've " + type + "D the following blog");
     }
 
     @DeleteMapping("/{userID}/{blogID}")
-    public ResponseEntity<String> delete(@PathVariable UUID userID, @PathVariable UUID blogID) {
-        blogService.delete(userID,blogID);
+    public ResponseEntity<String> delete(@PathVariable UUID userID,
+                                         @PathVariable UUID blogID) {
+
+        blogService.delete(userID, blogID);
         return ResponseEntity.ok("Deleted");
     }
 
     @DeleteMapping("comment/{blogID}/{commentID}")
-    public ResponseEntity<String> deleteComment(@PathVariable UUID blogID, @PathVariable UUID commentID) {
+    public ResponseEntity<String> deleteComment(@PathVariable UUID blogID,
+                                                @PathVariable UUID commentID) {
+
         blogService.deleteComment(blogID, commentID);
         return ResponseEntity.ok("Deleted comment successfully");
     }
