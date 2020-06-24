@@ -25,7 +25,8 @@ public class User {
     @GeneratedValue
     private UUID id;
 
-    private String profileImageLink;
+    @Lob
+    private byte[] image;
 
     @NotBlank
     @Size(min = 2, max = 20, message = "first-name must contain min 2 characters and max 20 characters")

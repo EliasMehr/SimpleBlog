@@ -2,14 +2,17 @@ package se.simpleblog.blog.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import se.simpleblog.blog.domain.User;
 import se.simpleblog.blog.exception.APIRequestException;
 import se.simpleblog.blog.service.UserService;
 
+import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 import java.util.HashMap;
@@ -60,6 +63,16 @@ public class UserController {
 
         userService.update(userID, user);
         return ResponseEntity.ok(user);
+    }
+
+    @PostMapping(path = "upload/profile-image/{userID}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public void uploadProfilePicture(
+            @PathVariable UUID userID,
+            @RequestParam("file") MultipartFile file) {
+
+            userService.upload(userID, file);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -104,9 +104,7 @@ public class BlogService {
                          UUID userID) {
 
         repository.findById(blogID).ifPresentOrElse(blog -> {
-            Optional<User> userExistsInLikes = blog.getLikes().stream()
-                    .filter(user -> userID.equals(user.getId()))
-                    .findAny();
+            Optional<User> userExistsInLikes = isUserPresentLikes(userID, blog);
 
             Optional<User> userExistsInDislike = blog.getDisLikes().stream()
                     .filter(user -> userID.equals(user.getId()))
@@ -123,6 +121,12 @@ public class BlogService {
         }, () -> {
             throw new APIRequestException("Cannot find blog by id");
         });
+    }
+
+    private Optional<User> isUserPresentLikes(UUID userID, Blog blog) {
+        return blog.getLikes().stream()
+                        .filter(user -> userID.equals(user.getId()))
+                        .findAny();
     }
 
 
@@ -148,9 +152,7 @@ public class BlogService {
                     .filter(user -> userID.equals(user.getId()))
                     .findAny();
 
-            Optional<User> userExistsInLikes = blog.getLikes().stream()
-                    .filter(user -> userID.equals(user.getId()))
-                    .findAny();
+            Optional<User> userExistsInLikes = isPresentInLikes(userID, blog);
 
             if (userExistsInDislike.isPresent()) {
                 throw new APIRequestException("You cannot dislike more than once");
@@ -161,6 +163,12 @@ public class BlogService {
                 });
             } else userRepository.findById(userID).ifPresent(blog::addDislike);
         });
+    }
+
+    private Optional<User> isPresentInLikes(UUID userID, Blog blog) {
+        return blog.getLikes().stream()
+                .filter(user -> userID.equals(user.getId()))
+                .findAny();
     }
 
     private void deleteDislike(UUID blogID,
