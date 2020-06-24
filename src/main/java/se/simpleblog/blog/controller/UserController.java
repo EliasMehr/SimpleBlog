@@ -12,7 +12,6 @@ import se.simpleblog.blog.domain.User;
 import se.simpleblog.blog.exception.APIRequestException;
 import se.simpleblog.blog.service.UserService;
 
-import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 import java.util.HashMap;
@@ -22,6 +21,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/")
+@CrossOrigin("*")
 public class UserController {
 
     private final UserService userService;
